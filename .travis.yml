@@ -4,23 +4,6 @@ sudo: false
 matrix:
   fast_finish: true
   include:
-    - php: "5.3"
-      os: linux
-      env: USE_PSALM=0
-           CHECK_MBSTRING=1
-      dist: precise
-    - php: "5.4"
-      os: linux
-      env: USE_PSALM=0
-           CHECK_MBSTRING=1
-    - php: "5.5"
-      os: linux
-      env: USE_PSALM=0
-           CHECK_MBSTRING=1
-    - php: "5.6"
-      os: linux
-      env: USE_PSALM=1
-           CHECK_MBSTRING=1
     - php: "7.0"
       os: linux
       env: USE_PSALM=1
@@ -55,8 +38,4 @@ install:
     - composer update
 
 script:
-    - travis_wait 30 vendor/bin/phpunit
-    - if [[ $CHECK_MBSTRING -eq 1 ]]; then travis_wait 30 php -dmbstring.func_overload=7 vendor/bin/phpunit; fi
-    - vendor/bin/phpunit --bootstrap autoload-fast.php
-    - if [[ $CHECK_MBSTRING -eq 1 ]]; then travis_wait 30 php -dmbstring.func_overload=7 vendor/bin/phpunit --bootstrap autoload-fast.php; fi
-    - if [[ $USE_PSALM -eq 1 ]]; then vendor/bin/psalm; fi
+    - if [[ $USE_PSALM -eq 1 ]]; then vendor/bin/psalm --debug-by-line; fi
